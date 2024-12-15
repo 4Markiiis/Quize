@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Die deutsch-deutsche Grenze: Interaktives Quiz</title>
+    <style>
+        /* Оставляем стили без изменений */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            text-align: center;
+            background-color: #1d3557;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .question-container {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .level {
+            color: #1d3557;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options {
+            margin-top: 15px;
+        }
+        .option {
+            display: block;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .option:hover {
+            background-color: #e9ecef;
+        }
+        .option.correct {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .option.incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .feedback {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .submit-btn {
+            background-color: #1d3557;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .submit-btn:hover {
+            background-color: #152642;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Die deutsch-deutsche Grenze</h1>
+        <p>Ein interaktives Geschichtsquiz</p>
+    </div>
+
+    <!-- Сложный вопрос с несколькими правильными ответами -->
+    <div class="question-container">
+        <div class="level">Niveau 3: Schwer</div>
+        <h3>Welche Länder grenzen an die ehemalige DDR?</h3>
+        <div class="options" data-correct="0,2">
+            <label class="option">
+                <input type="checkbox" name="q5"> Polen
+            </label>
+            <label class="option">
+                <input type="checkbox" name="q5"> Niederlande
+            </label>
+            <label class="option">
+                <input type="checkbox" name="q5"> Tschechoslowakei
+            </label>
+            <label class="option">
+                <input type="checkbox" name="q5"> Schweiz
+            </label>
+        </div>
+        <div class="feedback"></div>
+    </div>
+
+    <!-- Еще один сложный вопрос -->
+    <div class="question-container">
+        <div class="level">Niveau 3: Schwer</div>
+        <h3>Welche Städte waren durch die Berliner Mauer getrennt?</h3>
+        <div class="options" data-correct="0,1">
+            <label class="option">
+                <input type="checkbox" name="q6"> Ost-Berlin
+            </label>
+            <label class="option">
+                <input type="checkbox" name="q6"> West-Berlin
+            </label>
+            <label class="option">
+                <input type="checkbox" name="q6"> München
+            </label>
+            <label class="option">
+                <input type="checkbox" name="q6"> Hamburg
+            </label>
+        </div>
+        <div class="feedback"></div>
+    </div>
+
+    <button class="submit-btn" onclick="submitQuiz()">Quiz abschließen</button>
+
+    <script>
+        // Обработчик для вопросов с несколькими вариантами ответа
+        document.querySelectorAll('.options').forEach(optionsContainer => {
+            const options = optionsContainer.querySelectorAll('.option');
+            const correctIndexes = optionsContainer.dataset.correct.split(',').map(Number);
+            const feedback = optionsContainer.nextElementSibling;
+
+            options.forEach((option, index) => {
+                option.addEventListener('click', () => {
+                    const selectedOptions = Array.from(optionsContainer.querySelectorAll('input:checked'))
+                        .map(input => Array.from(optionsContainer.querySelectorAll('input')).indexOf(input));
+
+                    if (JSON.stringify(selectedOptions.sort()) === JSON.stringify(correctIndexes.sort())) {
+                        options.forEach(opt => opt.classList.remove('correct', 'incorrect'));
+                        selectedOptions.forEach(i => options[i].classList.add('correct'));
+                        feedback.style.display = 'block';
+                        feedback.style.backgroundColor = '#d4edda';
+                        feedback.textContent = 'Richtig! Alle korrekten Antworten wurden ausgewählt.';
+                    } else {
+                        options.forEach(opt => opt.classList.remove('correct', 'incorrect'));
+                        selectedOptions.forEach(i => options[i].classList.add('incorrect'));
+                        correctIndexes.forEach(i => options[i].classList.add('correct'));
+                        feedback.style.display = 'block';
+                        feedback.style.backgroundColor = '#f8d7da';
+                        feedback.textContent = 'Falsch. Die richtigen Antworten sind markiert.';
+                    }
+                });
+            });
+        });
+
+        function submitQuiz() {
+            alert("Das Quiz ist abgeschlossen! Überprüfen Sie Ihre Antworten.");
+        }
+    </script>
+</body>
+</html>
